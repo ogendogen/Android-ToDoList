@@ -1,5 +1,6 @@
 package com.example.marcin.todolist;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,11 +9,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ScrollView;
 
 public class MainActivity extends AppCompatActivity {
 
-    Toolbar toolbar;
-    FloatingActionButton fab;
+    private Toolbar toolbar;
+    private FloatingActionButton fab;
+    private ScrollView scrollView;
+    private TaskList tasks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,10 +25,16 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        tasks = new TaskList();
+        scrollView = (ScrollView)findViewById(R.id.scroll);
+
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), TaskActivity.class);
+                intent.putExtra("isEdit", false);
+                startActivity(intent);
                 //Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
                 //        .setAction("Action", null).show();
             }

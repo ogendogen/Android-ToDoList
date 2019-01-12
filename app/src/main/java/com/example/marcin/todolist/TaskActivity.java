@@ -1,5 +1,6 @@
 package com.example.marcin.todolist;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,14 +13,17 @@ import java.util.Date;
 
 public class TaskActivity extends AppCompatActivity {
 
-    EditText taskName, taskDesc, taskDate, taskTime;
-    SeekBar priority;
-    Button btn;
+    private EditText taskName, taskDesc, taskDate, taskTime;
+    private SeekBar priority;
+    private Button btn;
+    private Boolean isEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task);
+
+        isEdit = getIntent().getBooleanExtra("isEdit", false);
 
         taskName = (EditText)findViewById(R.id.editText);
         taskDesc = (EditText)findViewById(R.id.editText3);
@@ -40,9 +44,12 @@ public class TaskActivity extends AppCompatActivity {
                 {
                     String s_TaskName = taskName.getText().toString();
                     String s_taskDesc = taskDesc.getText().toString();
-                    String dueDate = taskDate.getText().toString();
-                    String dueTime = taskTime.getText().toString();
+                    String s_dueDate = taskDate.getText().toString();
+                    String s_dueTime = taskTime.getText().toString();
                     int i_priority = priority.getProgress();
+
+                    //Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                    Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_LONG).show();
                 }
                 catch(Exception e)
                 {
