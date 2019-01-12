@@ -3,7 +3,7 @@ import java.util.Date;
 
 public class TaskList
 {
-    private ArrayList tasks;
+    private ArrayList<Task> tasks;
     public TaskList()
     {
         tasks = new ArrayList<Task>();
