@@ -9,7 +9,11 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
 
 public class TaskActivity extends AppCompatActivity {
 
@@ -31,7 +35,7 @@ public class TaskActivity extends AppCompatActivity {
         taskTime = (EditText)findViewById(R.id.editText5);
 
         priority = (SeekBar)findViewById(R.id.seekBar);
-        priority.setMax(5);
+        priority.setMax(4);
         priority.setProgress(3);
         priority.incrementProgressBy(1);
 
@@ -44,12 +48,32 @@ public class TaskActivity extends AppCompatActivity {
                 {
                     String s_TaskName = taskName.getText().toString();
                     String s_taskDesc = taskDesc.getText().toString();
+
                     String s_dueDate = taskDate.getText().toString();
                     String s_dueTime = taskTime.getText().toString();
+                    String s_dueDateTime = s_dueDate + " " + s_dueTime;
+
+                    SimpleDateFormat pattern = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.US);
+                    Date dueDateTime = pattern.parse(s_dueDateTime);
+
                     int i_priority = priority.getProgress();
 
-                    //Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                    Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_LONG).show();
+                    if (i_priority < 0 || i_priority > 4) throw new Exception("Niepoprawny priorytet!");
+                    if (s_TaskName.length() > 20) throw new Exception("Za długa nazwa! (max. 20 znaków)");
+                    if (s_taskDesc.length() > 128) throw new Exception("Za długi opis! (max. 128 znaków)");
+                    if (dueDateTime.before(new Date())) throw new Exception("Wybrany czas już minął!");
+
+                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                    i.putExtra("taskID", -1); // -1 -> dodawanie
+                    i.putExtra("taskName", s_TaskName);
+                    i.putExtra("taskDesc", s_taskDesc);
+                    i.putExtra("priority", i_priority);
+                    i.putExtra("dueDateTime", dueDateTime.getTime());
+                    Toast.makeText(getApplicationContext(), "Zadanie dodane", Toast.LENGTH_LONG).show();
+                }
+                catch(ParseException e)
+                {
+                    Toast.makeText(getApplicationContext(), "Niepoprawny format daty/czasu!", Toast.LENGTH_LONG).show();
                 }
                 catch(Exception e)
                 {

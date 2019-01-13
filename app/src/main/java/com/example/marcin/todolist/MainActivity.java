@@ -10,13 +10,16 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ScrollView;
+import android.widget.Toast;
+
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private FloatingActionButton fab;
     private ScrollView scrollView;
-    private TaskList tasks;
+    private TaskList tasks = new TaskList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +28,32 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        tasks = new TaskList();
         scrollView = (ScrollView)findViewById(R.id.scroll);
+
+        int taskID = getIntent().getIntExtra("taskID", -1);
+        if (taskID == -1) // dodawanie
+        {
+            Intent i = getIntent();
+            String s_TaskName = i.getStringExtra("taskName");
+            String s_TaskDesc = i.getStringExtra("taskDesc");
+            int i_priority = i.getIntExtra("priority", 2);
+            Date dueDate = new Date();
+            dueDate.setTime(i.getLongExtra("dueDateTime", -1));
+
+            try
+            {
+                tasks.addTask(s_TaskName, s_TaskDesc, i_priority, dueDate);
+            }
+            catch(Exception e)
+            {
+                Toast.makeText(getApplicationContext(), "Błąd: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
+        else // edycja
+        {
+
+        }
+
 
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
