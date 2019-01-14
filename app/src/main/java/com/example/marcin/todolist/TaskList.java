@@ -32,6 +32,11 @@ public class TaskList
         tasks.add(task);
     }
 
+    public int length()
+    {
+        return tasks.size();
+    }
+
     public void removeTask(int index) throws Exception
     {
         try

@@ -36,7 +36,7 @@ public class TaskActivity extends AppCompatActivity {
 
         priority = (SeekBar)findViewById(R.id.seekBar);
         priority.setMax(4);
-        priority.setProgress(3);
+        priority.setProgress(2);
         priority.incrementProgressBy(1);
 
         btn = (Button)findViewById(R.id.button);
@@ -58,6 +58,7 @@ public class TaskActivity extends AppCompatActivity {
 
                     int i_priority = priority.getProgress();
 
+                    if (s_TaskName.isEmpty() || s_taskDesc.isEmpty() || s_dueDate.isEmpty()) throw new Exception("Jedno z pól jest puste!");
                     if (i_priority < 0 || i_priority > 4) throw new Exception("Niepoprawny priorytet!");
                     if (s_TaskName.length() > 20) throw new Exception("Za długa nazwa! (max. 20 znaków)");
                     if (s_taskDesc.length() > 128) throw new Exception("Za długi opis! (max. 128 znaków)");
@@ -69,6 +70,8 @@ public class TaskActivity extends AppCompatActivity {
                     i.putExtra("taskDesc", s_taskDesc);
                     i.putExtra("priority", i_priority);
                     i.putExtra("dueDateTime", dueDateTime.getTime());
+                    startActivity(i);
+
                     Toast.makeText(getApplicationContext(), "Zadanie dodane", Toast.LENGTH_LONG).show();
                 }
                 catch(ParseException e)

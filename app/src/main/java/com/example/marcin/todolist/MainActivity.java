@@ -9,9 +9,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         scrollView = (ScrollView)findViewById(R.id.scroll);
 
-        int taskID = getIntent().getIntExtra("taskID", -1);
+        int taskID = getIntent().getIntExtra("taskID", -2);
         if (taskID == -1) // dodawanie
         {
             Intent i = getIntent();
@@ -49,11 +52,26 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Błąd: " + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
-        else // edycja
+        else if (taskID > -1) // edycja
         {
 
         }
 
+        ArrayList<Task> mytasks = tasks.getTasks();
+        LinearLayout layout = (LinearLayout)scrollView.getChildAt(0); // this line crashes app
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        for (int i=0; i<mytasks.size(); i++)
+        {
+            TextView txt = new TextView(this);
+            txt.setText(mytasks.get(i).getName());
+            txt.setId(i);
+            txt.setLayoutParams(params);
+
+            layout.addView(txt);
+            //scrollView.addView(txt);
+        }
 
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
