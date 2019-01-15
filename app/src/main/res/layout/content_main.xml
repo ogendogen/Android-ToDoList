@@ -9,10 +9,11 @@
     tools:showIn="@layout/activity_main">
 
     <ScrollView
-        android:layout_width="368dp"
-        android:layout_height="495dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:id="@+id/scroll"
+        android:layout_width="386dp"
+        android:layout_height="567dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 

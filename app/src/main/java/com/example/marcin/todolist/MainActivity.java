@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         scrollView = (ScrollView)findViewById(R.id.scroll);
+        scrollView.removeAllViews();
 
         int taskID = getIntent().getIntExtra("taskID", -2);
         if (taskID == -1) // dodawanie
@@ -58,10 +59,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         ArrayList<Task> mytasks = tasks.getTasks();
-        LinearLayout layout = (LinearLayout)scrollView.getChildAt(0); // this line crashes app
-        layout.setOrientation(LinearLayout.VERTICAL);
+        //(LinearLayout)scrollView.getChildAt(0); // this line crashes app
+
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
         for (int i=0; i<mytasks.size(); i++)
         {
             TextView txt = new TextView(this);
@@ -70,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
             txt.setLayoutParams(params);
 
             layout.addView(txt);
-            //scrollView.addView(txt);
         }
+        scrollView.addView(layout);
 
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
