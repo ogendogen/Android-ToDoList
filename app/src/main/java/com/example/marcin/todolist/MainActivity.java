@@ -7,6 +7,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,8 +52,6 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
 
-        //Log.d("tasks-len", String.valueOf(mytasks.length()));
-
         View.OnClickListener globalTextViewListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 txt.setId(500 + i);
                 txt.setLayoutParams(params);
                 txt.setHeight(100);
+
                 txt.setOnClickListener(globalTextViewListener);
 
                 layout.addView(txt);
