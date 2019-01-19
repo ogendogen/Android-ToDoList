@@ -58,7 +58,7 @@ public class TaskFileHandler
             String line;
 
             in = new BufferedReader(new FileReader(new File(context.getFilesDir(), "tasks.txt")));
-            while ((line = in.readLine()) != null) builder.append(line);
+            while ((line = in.readLine()) != null) builder.append(line + "\n");
 
             return builder.toString();
         }
