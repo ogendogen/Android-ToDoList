@@ -45,14 +45,7 @@ public class TaskFileHandler
         }
         finally
         {
-            try
-            {
-                stream.close();
-            }
-            catch(NullPointerException e)
-            {
-                Toast.makeText(context, "writeTask2: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            }
+            if (stream != null) stream.close();
         }
     }
 
@@ -73,6 +66,10 @@ public class TaskFileHandler
         {
             e.printStackTrace();
             throw e;
+        }
+        finally
+        {
+            if (in != null) in.close();
         }
     }
 
@@ -118,14 +115,7 @@ public class TaskFileHandler
         }
         finally
         {
-            try
-            {
-                if (in != null) in.close();
-            }
-            catch(NullPointerException e)
-            {
-                Toast.makeText(context, "readAllTasks2: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            }
+            if (in != null) in.close();
         }
 
         return null;
