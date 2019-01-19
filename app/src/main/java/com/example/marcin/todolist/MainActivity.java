@@ -52,14 +52,31 @@ public class MainActivity extends AppCompatActivity {
 
         //Log.d("tasks-len", String.valueOf(mytasks.length()));
 
+        View.OnClickListener globalTextViewListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //String resourceName = view.getResources().getResourceName(view.getId());
+                int taskID = view.getId();
+                taskID -= 500;
+
+                Intent i = new Intent(getApplicationContext(), TaskActivity.class);
+                i.putExtra("isEdit", true);
+                i.putExtra("indexToEdit", taskID);
+                startActivity(i);
+            }
+        };
+
         try
         {
+            int offset = 500;
             for (int i=0; i<mytasks.length(); i++)
             {
                 TextView txt = new TextView(this);
                 txt.setText(mytasks.get(i).getName());
-                txt.setId(i);
+                txt.setId(500 + i);
                 txt.setLayoutParams(params);
+                txt.setHeight(100);
+                txt.setOnClickListener(globalTextViewListener);
 
                 layout.addView(txt);
             }

@@ -208,4 +208,40 @@ public class TaskFileHandler
             if (stream != null) stream.close();
         }
     }
+
+    public static String[] getTaskPartsById(Context context, int index)
+    {
+        BufferedReader in = null;
+        if (index == -1) return null;
+
+        try
+        {
+            File path = context.getFilesDir();
+            File file = new File(path, "tasks.txt");
+
+            StringBuilder builder = new StringBuilder();
+            String line;
+
+            in = new BufferedReader(new FileReader(new File(context.getFilesDir(), "tasks.txt")));
+            while ((line = in.readLine()) != null) builder.append(line + "\n");
+
+            String buffer = builder.toString();
+            int counter = 0;
+
+            String[] lines = buffer.split("\n");
+            return lines[index].split("\\|");
+        }
+        catch(IndexOutOfBoundsException e)
+        {
+            e.printStackTrace();
+            Toast.makeText(context, "Edytowane zadanie nie istnieje!", Toast.LENGTH_LONG).show();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            Toast.makeText(context, "getTaskPartsById: " + e.getMessage().toString(), Toast.LENGTH_LONG).show();
+        }
+
+        return null;
+    }
 }

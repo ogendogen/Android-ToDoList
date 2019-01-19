@@ -21,6 +21,7 @@ public class TaskActivity extends AppCompatActivity {
     private SeekBar priority;
     private Button btn;
     private Boolean isEdit;
+    private int indexToEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,7 @@ public class TaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_task);
 
         isEdit = getIntent().getBooleanExtra("isEdit", false);
+        indexToEdit = getIntent().getIntExtra("indexToEdit", -1);
 
         taskName = (EditText)findViewById(R.id.editText);
         taskDesc = (EditText)findViewById(R.id.editText3);
@@ -40,6 +42,30 @@ public class TaskActivity extends AppCompatActivity {
         priority.incrementProgressBy(1);
 
         btn = (Button)findViewById(R.id.button);
+
+        if (isEdit)
+        {
+            String[] parts = TaskFileHandler.getTaskPartsById(getApplicationContext(), indexToEdit);
+            if (parts == null || parts.length == 0)
+            {
+                Toast.makeText(getApplicationContext(), "Wewnętrzny błąd edycji!", Toast.LENGTH_LONG).show();
+            }
+            else
+            {
+                taskName.setText(parts[0]);
+                taskDesc.setText(parts[1]);
+                String[] dateParts = parts[3].split(" ");
+                taskDate.setText(dateParts[0]);
+                taskTime.setText(dateParts[1]);
+
+                priority.setProgress(Integer.parseInt(parts[2]));
+                btn.setText("Zmień");
+            }
+        }
+        else
+        {
+            btn.setText("Dodaj");
+        }
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,16 +90,28 @@ public class TaskActivity extends AppCompatActivity {
                     if (s_taskDesc.length() > 128) throw new Exception("Za długi opis! (max. 128 znaków)");
                     if (dueDateTime.before(new Date())) throw new Exception("Wybrany czas już minął!");
 
-                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                    /*i.putExtra("taskID", -1); // -1 -> dodawanie
-                    i.putExtra("taskName", s_TaskName);
-                    i.putExtra("taskDesc", s_taskDesc);
-                    i.putExtra("priority", i_priority);
-                    i.putExtra("dueDateTime", dueDateTime.getTime());*/
-                    TaskFileHandler.writeTask(getApplicationContext(), new Task(s_TaskName, s_taskDesc, i_priority, dueDateTime));
-                    startActivity(i);
+                    if (isEdit)
+                    {
+                        TaskFileHandler.editTask(getApplicationContext(), indexToEdit, s_TaskName, s_taskDesc, i_priority, dueDateTime);
 
-                    Toast.makeText(getApplicationContext(), "Zadanie dodane", Toast.LENGTH_LONG).show();
+                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(i);
+
+                        Toast.makeText(getApplicationContext(), "Zadanie zmienione", Toast.LENGTH_LONG).show();
+                    }
+                    else
+                    {
+                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                        /*i.putExtra("taskID", -1); // -1 -> dodawanie
+                        i.putExtra("taskName", s_TaskName);
+                        i.putExtra("taskDesc", s_taskDesc);
+                        i.putExtra("priority", i_priority);
+                        i.putExtra("dueDateTime", dueDateTime.getTime());*/
+                        TaskFileHandler.writeTask(getApplicationContext(), new Task(s_TaskName, s_taskDesc, i_priority, dueDateTime));
+                        startActivity(i);
+
+                        Toast.makeText(getApplicationContext(), "Zadanie dodane", Toast.LENGTH_LONG).show();
+                    }
                 }
                 catch(ParseException e)
                 {
