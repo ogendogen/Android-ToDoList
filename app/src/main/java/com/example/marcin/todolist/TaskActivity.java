@@ -65,11 +65,12 @@ public class TaskActivity extends AppCompatActivity {
                     if (dueDateTime.before(new Date())) throw new Exception("Wybrany czas już minął!");
 
                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                    i.putExtra("taskID", -1); // -1 -> dodawanie
+                    /*i.putExtra("taskID", -1); // -1 -> dodawanie
                     i.putExtra("taskName", s_TaskName);
                     i.putExtra("taskDesc", s_taskDesc);
                     i.putExtra("priority", i_priority);
-                    i.putExtra("dueDateTime", dueDateTime.getTime());
+                    i.putExtra("dueDateTime", dueDateTime.getTime());*/
+                    TaskFileHandler.writeTask(getApplicationContext(), new Task(s_TaskName, s_taskDesc, i_priority, dueDateTime));
                     startActivity(i);
 
                     Toast.makeText(getApplicationContext(), "Zadanie dodane", Toast.LENGTH_LONG).show();

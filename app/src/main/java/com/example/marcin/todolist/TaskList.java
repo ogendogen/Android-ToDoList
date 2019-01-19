@@ -21,20 +21,32 @@ public class TaskList
         throw new Exception("Not implemented yet!");
     }
 
-    public void addTask(String taskName, String taskDesc, int priority, Date dueDate) throws Exception
+    public void addTask(String taskName, String taskDesc, int priority, Date dueDate, Boolean fromFile) throws Exception
     {
         if (priority < 0 || priority > 5) throw new Exception("Niepoprawny priorytet!");
         if (taskName.length() > 20) throw new Exception("Za długa nazwa! (max. 20 znaków)");
         if (taskDesc.length() > 128) throw new Exception("Za długi opis! (max. 128 znaków)");
-        if (dueDate.before(new Date())) throw new Exception("Wybrany czas już minął!");
+        if (dueDate.before(new Date()) && !fromFile) throw new Exception("Wybrany czas już minął!");
 
-        Task task = new Task(taskName, taskDesc, priority, dueDate);
-        tasks.add(task);
+        tasks.add(new Task(taskName, taskDesc, priority, dueDate));
     }
 
     public int length()
     {
         return tasks.size();
+    }
+
+    public Task get(int index) throws ArrayIndexOutOfBoundsException
+    {
+        try
+        {
+            return tasks.get(index);
+        }
+        catch(ArrayIndexOutOfBoundsException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void removeTask(int index) throws Exception

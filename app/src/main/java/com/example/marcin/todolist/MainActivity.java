@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,46 +35,38 @@ public class MainActivity extends AppCompatActivity {
         scrollView = (ScrollView)findViewById(R.id.scroll);
         scrollView.removeAllViews();
 
-        int taskID = getIntent().getIntExtra("taskID", -2);
-        if (taskID == -1) // dodawanie
+        TaskList mytasks = null;
+        try
         {
-            Intent i = getIntent();
-            String s_TaskName = i.getStringExtra("taskName");
-            String s_TaskDesc = i.getStringExtra("taskDesc");
-            int i_priority = i.getIntExtra("priority", 2);
-            Date dueDate = new Date();
-            dueDate.setTime(i.getLongExtra("dueDateTime", -1));
-
-            try
-            {
-                tasks.addTask(s_TaskName, s_TaskDesc, i_priority, dueDate);
-            }
-            catch(Exception e)
-            {
-                Toast.makeText(getApplicationContext(), "Błąd: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            }
+            //TaskFileHandler.deleteFile(getApplicationContext());
+            mytasks = TaskFileHandler.readAllTasks(getApplicationContext());
         }
-        else if (taskID > -1) // edycja
+        catch(Exception e)
         {
-
+            Toast.makeText(this, "Błąd: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
-
-        ArrayList<Task> mytasks = tasks.getTasks();
-        //(LinearLayout)scrollView.getChildAt(0); // this line crashes app
-
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
 
-        for (int i=0; i<mytasks.size(); i++)
-        {
-            TextView txt = new TextView(this);
-            txt.setText(mytasks.get(i).getName());
-            txt.setId(i);
-            txt.setLayoutParams(params);
+        //Log.d("tasks-len", String.valueOf(mytasks.length()));
 
-            layout.addView(txt);
+        try
+        {
+            for (int i=0; i<mytasks.length(); i++)
+            {
+                TextView txt = new TextView(this);
+                txt.setText(mytasks.get(i).getName());
+                txt.setId(i);
+                txt.setLayoutParams(params);
+
+                layout.addView(txt);
+            }
+        }
+        catch(NullPointerException e)
+        {
+            e.printStackTrace();
         }
         scrollView.addView(layout);
 
