@@ -134,4 +134,78 @@ public class TaskFileHandler
             Toast.makeText(context, "deleteFile: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
+
+    public static void editTask(Context context, int index, String taskName, String taskDesc, int priority, Date dueDate)
+    {
+        FileOutputStream stream = null;
+        try
+        {
+            String rawFile = readRaw(context);
+
+            File path = context.getFilesDir();
+            File file = new File(path, "tasks.txt");
+            file.delete();
+            file.createNewFile();
+
+            String[] tasks = rawFile.split("\n");
+            StringBuilder finalOutput = new StringBuilder();
+            for (int i=0; i<tasks.length; i++)
+            {
+                if (i == index)
+                {
+                    SimpleDateFormat format = new SimpleDateFormat("d-M-Y H:m", Locale.ENGLISH);
+                    finalOutput.append(taskName + "|" + taskDesc + "|" + String.valueOf(priority) + "|" + format.format(dueDate) + "\n");
+                }
+                else
+                {
+                    finalOutput.append(tasks[i] + "\n");
+                }
+            }
+
+            stream = new FileOutputStream(file, false);
+            stream.write(finalOutput.toString().getBytes());
+            stream.close();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            Toast.makeText(context, "Błąd edycji: " + e.getMessage().toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public static void removeTask(Context context, int index) throws Exception
+    {
+        FileOutputStream stream = null;
+        try
+        {
+            String rawFile = readRaw(context);
+
+            File path = context.getFilesDir();
+            File file = new File(path, "tasks.txt");
+
+            String[] tasks = rawFile.split("\n");
+            StringBuilder builder = new StringBuilder();
+            for (int i=0; i<tasks.length; i++)
+            {
+                if (i == index) continue;
+                String[] parts = tasks[i].split("\\|");
+                builder.append(parts[0] + "|" + parts[1] + "|" + parts[2] + "|" + parts[3] + "\n");
+            }
+            file.delete();
+            file.createNewFile();
+
+            stream = new FileOutputStream(file, false);
+            stream.write(builder.toString().getBytes());
+            stream.close();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            Toast.makeText(context, "Błąd usuwania: " + e.getMessage().toString(), Toast.LENGTH_LONG).show();
+        }
+        finally
+        {
+            if (stream != null) stream.close();
+        }
+    }
 }
