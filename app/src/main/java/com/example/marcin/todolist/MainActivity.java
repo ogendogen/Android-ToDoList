@@ -1,5 +1,6 @@
 package com.example.marcin.todolist;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -110,17 +111,62 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings)
+        {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.Theme_AppCompat_Dialog_Alert);
             builder.setTitle("Po czym chcesz sortować ?");
-            //String[] items = {"Po dacie", "Po priorytecie", "Alfabetycznie", ""}
+            String[] items = {"Po dacie", "Po priorytecie", "Alfabetycznie", "Niealfabetycznie"};
+            builder.setItems(items, new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    try
+                    {
+                        switch(which)
+                        {
+                            case 0:
+                            {
+                                tasks.sortTasks(TaskList.SortCriteria.DueDate);
+                                finish();
+                                startActivity(getIntent());
+                            }
+                            case 1:
+                            {
+                                tasks.sortTasks(TaskList.SortCriteria.Priority);
+                                finish();
+                                startActivity(getIntent());
+                            }
+                            case 2:
+                            {
+                                tasks.sortTasks(TaskList.SortCriteria.TaskNameAsc);
+                                finish();
+                                startActivity(getIntent());
+                            }
+                            case 3:
+                            {
+                                tasks.sortTasks(TaskList.SortCriteria.TaskNameDesc);
+                                finish();
+                                startActivity(getIntent());
+                            }
+                        }
+                    }
+                    catch(Exception e)
+                    {
+                        Toast.makeText(getApplicationContext(), "Błąd: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+            builder.create();
+            builder.show();
             return true;
         }
 
