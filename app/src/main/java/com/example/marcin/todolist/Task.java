@@ -1,8 +1,10 @@
 package com.example.marcin.todolist;
 
+import android.location.Address;
+
 import java.util.Date;
 
-public class Task
+public class Task implements Cloneable
 {
     private String name;
     private String description;
@@ -10,12 +12,31 @@ public class Task
     private Date dueDate;
     private Boolean isExpired;
 
-    public Task(String name, String description, int priority, Date dueDate) {
+    public Task(String name, String description, int priority, Date dueDate)
+    {
         this.name = name;
         this.description = description;
         this.priority = priority;
         this.dueDate = dueDate;
         this.isExpired = false;
+    }
+
+    public Task(Task task)
+    {
+        this.name = task.getName();
+        this.description = task.getDescription();
+        this.priority = task.getPriority();
+        this.dueDate = task.getDueDate();
+        this.isExpired = task.getIsExpired();
+    }
+
+    @Override
+    public Object clone() {
+        try {
+            return (Task) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return new Task(this);
+        }
     }
 
     public static void validateData(String taskName, String taskDesc, int priority, Date dueDate, Boolean fromFile) throws Exception
@@ -57,4 +78,6 @@ public class Task
     public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
     }
+
+    public Boolean getIsExpired() { return isExpired; }
 }

@@ -1,11 +1,22 @@
 package com.example.marcin.todolist;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Dictionary;
 
 public class TaskList
 {
     private ArrayList<Task> tasks;
+
+    public enum SortCriteria
+    {
+        DueDate,
+        Priority,
+        TaskNameAsc,
+        TaskNameDesc
+    }
+
     public TaskList()
     {
         tasks = new ArrayList<Task>();
@@ -91,5 +102,94 @@ public class TaskList
         {
             throw e;
         }
+    }
+
+    public void sortTasks(SortCriteria sortCriterium) throws Exception
+    {
+        try
+        {
+            if (tasks.size() == 0) throw new Exception("Lista zadań jest pusta!");
+            if (tasks.size() == 1) throw new Exception("Masz tylko jedno zadanie!");
+
+            ArrayList<Task> sortedTasks = new ArrayList<Task>(tasks.size());
+            switch(sortCriterium)
+            {
+                case DueDate:
+                {
+                    while (!tasks.isEmpty())
+                    {
+                        Date earliestDate = tasks.get(0).getDueDate();
+                        Task earliestTask = null;
+                        for (int i=0; i<tasks.size(); i++)
+                        {
+                            Date currentDate = tasks.get(i).getDueDate();
+                            if (currentDate.before(earliestDate))
+                            {
+                                earliestDate = currentDate;
+                                earliestTask = new Task(tasks.get(i));
+                            }
+                        }
+                        sortedTasks.add(new Task(earliestTask));
+                        tasks.remove(earliestTask);
+                    }
+                }
+                case Priority:
+                {
+                    while (!tasks.isEmpty())
+                    {
+                        int greatestPriority = tasks.get(0).getPriority();
+                        Task earliestTask = null;
+                        for (int i=0; i<tasks.size(); i++)
+                        {
+                            int currentPriority = tasks.get(i).getPriority();
+                            if (currentPriority > greatestPriority)
+                            {
+                                greatestPriority = currentPriority;
+                                earliestTask = new Task(tasks.get(i));
+                            }
+                        }
+                        sortedTasks.add(new Task(earliestTask));
+                        tasks.remove(earliestTask);
+                    }
+                }
+                case TaskNameAsc:
+                {
+                    ArrayList<String> taskNames = new ArrayList<String>(tasks.size());
+                    for (Task task : tasks) taskNames.add(task.getName());
+                    Collections.sort(taskNames);
+                    for (String taskName : taskNames)
+                    {
+                        Task task = getTaskByName(taskName);
+                        sortedTasks.add(new Task(task));
+                    }
+                }
+                case TaskNameDesc:
+                {
+                    ArrayList<String> taskNames = new ArrayList<String>(tasks.size());
+                    for (Task task : tasks) taskNames.add(task.getName());
+                    Collections.sort(taskNames);
+                    Collections.reverse(taskNames);
+                    for (String taskName : taskNames)
+                    {
+                        Task task = getTaskByName(taskName);
+                        sortedTasks.add(new Task(task));
+                    }
+                }
+            }
+            this.tasks = sortedTasks; // ??? clone() ?
+        }
+        catch(Exception e)
+        {
+            throw e;
+        }
+    }
+
+    private Task getTaskByName(String name)
+    {
+        for (Task task : tasks)
+        {
+            if (task.getName().equals(name)) return task;
+        }
+        return null;
     }
 }
