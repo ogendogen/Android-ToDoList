@@ -23,6 +23,7 @@ public class Task implements Cloneable
 
     public Task(Task task)
     {
+        //this(task.getName(), task.getDescription(), task.getPriority(), task.getDueDate());
         this.name = task.getName();
         this.description = task.getDescription();
         this.priority = task.getPriority();

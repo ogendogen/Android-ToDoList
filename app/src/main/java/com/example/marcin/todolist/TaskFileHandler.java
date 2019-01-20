@@ -29,7 +29,7 @@ public class TaskFileHandler
             String taskDesc = task.getDescription();
             String priority = String.valueOf(task.getPriority());
 
-            SimpleDateFormat format = new SimpleDateFormat("d-M-Y H:m", Locale.ENGLISH);
+            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.ENGLISH);
             String dueDate = format.format(task.getDueDate()); //format.pa//String.valueOf(task.getDueDate());
 
             String finalLine = "";
@@ -96,9 +96,10 @@ public class TaskFileHandler
 
                 if (parts.length != 4)
                     throw new Exception("Brakujące elementy w pliku! Len = " + parts.length);
-                SimpleDateFormat format = new SimpleDateFormat("d-M-Y H:m", Locale.ENGLISH);
+                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.ENGLISH);
 
-                Log.d("date", format.parse(parts[3]).toString());
+                Log.d("dateRaw", parts[3]);
+                Log.d("dateParsed", format.parse(parts[3]).toString());
 
                 taskList.addTask(parts[0], parts[1], Integer.parseInt(parts[2]), format.parse(parts[3]), true);
             }
@@ -153,7 +154,7 @@ public class TaskFileHandler
             {
                 if (i == index)
                 {
-                    SimpleDateFormat format = new SimpleDateFormat("d-M-Y H:m", Locale.ENGLISH);
+                    SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.ENGLISH);
                     finalOutput.append(taskName + "|" + taskDesc + "|" + String.valueOf(priority) + "|" + format.format(dueDate) + "\n");
                 }
                 else
@@ -169,7 +170,7 @@ public class TaskFileHandler
         catch(Exception e)
         {
             e.printStackTrace();
-            Toast.makeText(context, "Błąd edycji: " + e.getMessage().toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Błąd edycji: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -206,6 +207,18 @@ public class TaskFileHandler
         finally
         {
             if (stream != null) stream.close();
+        }
+    }
+
+    public static void reWriteToFile(Context context, TaskList tasks)
+    {
+        try
+        {
+
+        }
+        catch(Exception e)
+        {
+            Toast.makeText(context, "Błąd: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 

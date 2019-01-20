@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private FloatingActionButton fab;
     private ScrollView scrollView;
-    private TaskList tasks = new TaskList();
+    private TaskList mytasks = new TaskList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
         scrollView = (ScrollView)findViewById(R.id.scroll);
         scrollView.removeAllViews();
 
-        TaskList mytasks = null;
         try
         {
             //TaskFileHandler.deleteFile(getApplicationContext());
@@ -82,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 txt.setOnClickListener(globalTextViewListener);
 
                 layout.addView(txt);
+                layout.setId(R.id.mainLayout);
             }
         }
         catch(NullPointerException e)
@@ -135,32 +135,33 @@ public class MainActivity extends AppCompatActivity {
                         {
                             case 0:
                             {
-                                tasks.sortTasks(TaskList.SortCriteria.DueDate);
-                                finish();
-                                startActivity(getIntent());
+                                mytasks.sortTasks(TaskList.SortCriteria.DueDate);
+                                reOrderTasks(mytasks);
+                                break;
                             }
                             case 1:
                             {
-                                tasks.sortTasks(TaskList.SortCriteria.Priority);
-                                finish();
-                                startActivity(getIntent());
+                                mytasks.sortTasks(TaskList.SortCriteria.Priority);
+                                reOrderTasks(mytasks);
+                                break;
                             }
                             case 2:
                             {
-                                tasks.sortTasks(TaskList.SortCriteria.TaskNameAsc);
-                                finish();
-                                startActivity(getIntent());
+                                mytasks.sortTasks(TaskList.SortCriteria.TaskNameAsc);
+                                reOrderTasks(mytasks);
+                                break;
                             }
                             case 3:
                             {
-                                tasks.sortTasks(TaskList.SortCriteria.TaskNameDesc);
-                                finish();
-                                startActivity(getIntent());
+                                mytasks.sortTasks(TaskList.SortCriteria.TaskNameDesc);
+                                reOrderTasks(mytasks);
+                                break;
                             }
                         }
                     }
                     catch(Exception e)
                     {
+                        e.printStackTrace();
                         Toast.makeText(getApplicationContext(), "Błąd: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
@@ -171,5 +172,41 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void reOrderTasks(TaskList tasks)
+    {
+        View.OnClickListener globalTextViewListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //String resourceName = view.getResources().getResourceName(view.getId());
+                int taskID = view.getId();
+                taskID -= 550;
+
+                Intent i = new Intent(getApplicationContext(), TaskActivity.class);
+                i.putExtra("isEdit", true);
+                i.putExtra("indexToEdit", taskID);
+                startActivity(i);
+            }
+        };
+
+        LinearLayout layout = (LinearLayout)findViewById(R.id.mainLayout);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        layout.removeAllViews();
+        for (int i=0; i<tasks.length(); i++)
+        {
+            TextView txt = new TextView(this);
+            txt.setText(mytasks.get(i).getName());
+            txt.setId(550 + i);
+            txt.setLayoutParams(params);
+            txt.setHeight(100);
+
+            txt.setOnClickListener(globalTextViewListener);
+
+            layout.addView(txt);
+        }
     }
 }

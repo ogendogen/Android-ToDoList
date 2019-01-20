@@ -108,8 +108,8 @@ public class TaskList
     {
         try
         {
-            if (tasks.size() == 0) throw new Exception("Lista zadań jest pusta!");
-            if (tasks.size() == 1) throw new Exception("Masz tylko jedno zadanie!");
+            if (this.tasks.size() == 0) throw new Exception("Lista zadań jest pusta!");
+            if (this.tasks.size() == 1) throw new Exception("Masz tylko jedno zadanie!");
 
             ArrayList<Task> sortedTasks = new ArrayList<Task>(tasks.size());
             switch(sortCriterium)
@@ -119,7 +119,8 @@ public class TaskList
                     while (!tasks.isEmpty())
                     {
                         Date earliestDate = tasks.get(0).getDueDate();
-                        Task earliestTask = null;
+                        Task earliestTask = tasks.get(0);
+                        int indexToDelete = 0;
                         for (int i=0; i<tasks.size(); i++)
                         {
                             Date currentDate = tasks.get(i).getDueDate();
@@ -127,11 +128,14 @@ public class TaskList
                             {
                                 earliestDate = currentDate;
                                 earliestTask = new Task(tasks.get(i));
+                                indexToDelete = i;
                             }
                         }
+
                         sortedTasks.add(new Task(earliestTask));
-                        tasks.remove(earliestTask);
+                        tasks.remove(indexToDelete);
                     }
+                    break;
                 }
                 case Priority:
                 {
@@ -151,6 +155,7 @@ public class TaskList
                         sortedTasks.add(new Task(earliestTask));
                         tasks.remove(earliestTask);
                     }
+                    break;
                 }
                 case TaskNameAsc:
                 {
@@ -162,6 +167,7 @@ public class TaskList
                         Task task = getTaskByName(taskName);
                         sortedTasks.add(new Task(task));
                     }
+                    break;
                 }
                 case TaskNameDesc:
                 {
@@ -174,9 +180,11 @@ public class TaskList
                         Task task = getTaskByName(taskName);
                         sortedTasks.add(new Task(task));
                     }
+                    break;
                 }
             }
             this.tasks = sortedTasks; // ??? clone() ?
+            int a = 1;
         }
         catch(Exception e)
         {
