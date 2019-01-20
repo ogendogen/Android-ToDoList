@@ -29,6 +29,20 @@ public class MainActivity extends AppCompatActivity {
     private ScrollView scrollView;
     private TaskList mytasks = new TaskList();
 
+    View.OnClickListener globalTextViewListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            //String resourceName = view.getResources().getResourceName(view.getId());
+            int taskID = view.getId();
+            taskID -= 500;
+
+            Intent i = new Intent(getApplicationContext(), TaskActivity.class);
+            i.putExtra("isEdit", true);
+            i.putExtra("indexToEdit", taskID);
+            startActivity(i);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,20 +66,6 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
-
-        View.OnClickListener globalTextViewListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //String resourceName = view.getResources().getResourceName(view.getId());
-                int taskID = view.getId();
-                taskID -= 500;
-
-                Intent i = new Intent(getApplicationContext(), TaskActivity.class);
-                i.putExtra("isEdit", true);
-                i.putExtra("indexToEdit", taskID);
-                startActivity(i);
-            }
-        };
 
         try
         {
@@ -176,31 +176,24 @@ public class MainActivity extends AppCompatActivity {
 
     private void reOrderTasks(TaskList tasks)
     {
-        View.OnClickListener globalTextViewListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //String resourceName = view.getResources().getResourceName(view.getId());
-                int taskID = view.getId();
-                taskID -= 550;
-
-                Intent i = new Intent(getApplicationContext(), TaskActivity.class);
-                i.putExtra("isEdit", true);
-                i.putExtra("indexToEdit", taskID);
-                startActivity(i);
-            }
-        };
-
         LinearLayout layout = (LinearLayout)findViewById(R.id.mainLayout);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layout.setOrientation(LinearLayout.VERTICAL);
 
+        for (int i=0; i<layout.getChildCount(); i++)
+        {
+            TextView txt = (TextView)layout.getChildAt(i);
+            txt.setOnClickListener(null);
+        }
+
         layout.removeAllViews();
+
         for (int i=0; i<tasks.length(); i++)
         {
             TextView txt = new TextView(this);
             txt.setText(mytasks.get(i).getName());
-            txt.setId(550 + i);
+            txt.setId(500 + i);
             txt.setLayoutParams(params);
             txt.setHeight(100);
 

@@ -142,7 +142,8 @@ public class TaskList
                     while (!tasks.isEmpty())
                     {
                         int greatestPriority = tasks.get(0).getPriority();
-                        Task earliestTask = null;
+                        Task earliestTask = tasks.get(0);
+                        int indexToDelete = 0;
                         for (int i=0; i<tasks.size(); i++)
                         {
                             int currentPriority = tasks.get(i).getPriority();
@@ -150,10 +151,11 @@ public class TaskList
                             {
                                 greatestPriority = currentPriority;
                                 earliestTask = new Task(tasks.get(i));
+                                indexToDelete = i;
                             }
                         }
                         sortedTasks.add(new Task(earliestTask));
-                        tasks.remove(earliestTask);
+                        tasks.remove(indexToDelete);
                     }
                     break;
                 }
