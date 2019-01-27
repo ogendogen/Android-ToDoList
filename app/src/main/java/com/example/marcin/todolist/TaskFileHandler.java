@@ -154,7 +154,7 @@ public class TaskFileHandler
             {
                 String[] parts = tasks[i].split("\\|");
                 SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.ENGLISH);
-                int oldHashCode = Task.getHashCodeFromValues(parts[0], parts[1], format.parse(parts[3]), Integer.parseInt(parts[2]));
+                int oldHashCode = Task.getHashCodeFromValues(parts[0], parts[1], parts[2], parts[3]);
 
                 if (oldHashCode == index)
                 {
@@ -193,9 +193,7 @@ public class TaskFileHandler
             {
                 String[] parts = tasks[i].split("\\|");
 
-                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.ENGLISH);
-                if (index == Task.getHashCodeFromValues(parts[0], parts[1], format.parse(parts[3]), Integer.parseInt(parts[2]))) continue;
-
+                if (index == Task.getHashCodeFromValues(parts[0], parts[1], parts[2], parts[3])) continue;
                 builder.append(parts[0] + "|" + parts[1] + "|" + parts[2] + "|" + parts[3] + "\n");
             }
             file.delete();
@@ -251,15 +249,8 @@ public class TaskFileHandler
             for (String taskline : lines)
             {
                 String[] parts = taskline.split("\\|");
-                String name = parts[0];
-                String description = parts[1];
-                String s_date = parts[3];
 
-                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.ENGLISH);
-                Date dueDate = format.parse(s_date);
-
-                int priority = Integer.parseInt(parts[2]);
-                int task_hashCode = Task.getHashCodeFromValues(name, description, dueDate, priority);
+                int task_hashCode = Task.getHashCodeFromValues(parts[0], parts[1], parts[2], parts[3]);
                 if (task_hashCode == hashCode) return parts;
             }
 

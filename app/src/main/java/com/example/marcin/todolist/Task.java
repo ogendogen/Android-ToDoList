@@ -2,7 +2,10 @@ package com.example.marcin.todolist;
 
 import android.location.Address;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Task implements Cloneable
 {
@@ -53,8 +56,12 @@ public class Task implements Cloneable
         return (name.hashCode() * description.hashCode() * dueDate.hashCode()) / (priority == 0 ? 6 : priority);
     }
 
-    public static int getHashCodeFromValues(String name, String description, Date dueDate, int priority)
+    public static int getHashCodeFromValues(String name, String description, String s_priority, String s_dueDate) throws NumberFormatException, ParseException
     {
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.ENGLISH);
+        int priority = Integer.parseInt(s_priority);
+        Date dueDate = format.parse(s_dueDate);
+
         return (name.hashCode() * description.hashCode() * dueDate.hashCode()) / (priority == 0 ? 6 : priority);
     }
 
