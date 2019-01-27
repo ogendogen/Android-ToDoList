@@ -48,6 +48,16 @@ public class Task implements Cloneable
         if (dueDate.before(new Date()) && !fromFile) throw new Exception("Wybrany czas już minął!");
     }
 
+    public int getHashCode()
+    {
+        return (name.hashCode() * description.hashCode() * dueDate.hashCode()) / (priority == 0 ? 6 : priority);
+    }
+
+    public static int getHashCodeFromValues(String name, String description, Date dueDate, int priority)
+    {
+        return (name.hashCode() * description.hashCode() * dueDate.hashCode()) / (priority == 0 ? 6 : priority);
+    }
+
     public String getName() {
         return name;
     }

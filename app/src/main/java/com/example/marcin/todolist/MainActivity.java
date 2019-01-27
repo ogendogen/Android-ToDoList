@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
             //String resourceName = view.getResources().getResourceName(view.getId());
             int taskID = view.getId();
-            taskID -= 500;
 
             Intent i = new Intent(getApplicationContext(), TaskActivity.class);
             i.putExtra("isEdit", true);
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             {
                 TextView txt = new TextView(this);
                 txt.setText(mytasks.get(i).getName());
-                txt.setId(500 + i);
+                txt.setId(mytasks.get(i).getHashCode());
                 txt.setLayoutParams(params);
                 txt.setHeight(100);
 
@@ -193,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         {
             TextView txt = new TextView(this);
             txt.setText(mytasks.get(i).getName());
-            txt.setId(500 + i);
+            txt.setId(mytasks.get(i).getHashCode());
             txt.setLayoutParams(params);
             txt.setHeight(100);
 
