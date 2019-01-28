@@ -1,10 +1,13 @@
 package com.example.marcin.todolist;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -168,6 +171,21 @@ public class MainActivity extends AppCompatActivity {
             builder.create();
             builder.show();
             return true;
+        }
+        else if (id == R.id.export_file)
+        {
+            try
+            {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                FileExporter exporter = new FileExporter(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS));
+                exporter.exportFile(TaskFileHandler.readRaw(getApplicationContext()));
+                Toast.makeText(getApplicationContext(), "Plik zapisany w folderze z dokumentami", Toast.LENGTH_LONG).show();
+            }
+            catch(Exception e)
+            {
+                //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+                Toast.makeText(getApplicationContext(), "Błąd zapisu: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
         }
 
         return super.onOptionsItemSelected(item);

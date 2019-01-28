@@ -49,7 +49,7 @@ public class TaskFileHandler
         }
     }
 
-    private static String readRaw(Context context) throws Exception
+    public static String readRaw(Context context) throws Exception
     {
         BufferedReader in = null;
         try
