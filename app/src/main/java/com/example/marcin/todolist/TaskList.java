@@ -27,11 +27,6 @@ public class TaskList
         return tasks;
     }
 
-    public void overwriteFile() throws Exception
-    {
-        throw new Exception("Not implemented yet!");
-    }
-
     public void addTask(String taskName, String taskDesc, int priority, Date dueDate, Boolean fromFile) throws Exception
     {
         if (priority < 0 || priority > 5) throw new Exception("Niepoprawny priorytet!");
@@ -58,50 +53,6 @@ public class TaskList
             e.printStackTrace();
         }
         return null;
-    }
-
-    public void removeTask(int index) throws Exception
-    {
-        try
-        {
-            tasks.remove(index);
-        }
-        catch(Exception e)
-        {
-            throw e;
-        }
-    }
-
-    public void editTask(int index, String taskName, String taskDesc, int priority, Date dueDate) throws Exception
-    {
-        Task task = (Task)tasks.get(index);
-        try
-        {
-            if (taskName != null && !taskName.isEmpty())
-            {
-                if (taskName.length() > 20) throw new Exception("Za długa nazwa! (max. 20 znaków)");
-                else task.setName(taskName);
-            }
-            if (taskDesc != null && !taskDesc.isEmpty())
-            {
-                if (taskDesc.length() > 128) throw new Exception("Za długi opis! (max. 128 znaków)");
-                else task.setDescription(taskDesc);
-            }
-            if (priority != -1)
-            {
-                if (priority < 0 || priority > 5) throw new Exception("Niepoprawny priorytet!");
-                else task.setPriority(priority);
-            }
-            if (dueDate != null)
-            {
-                if (dueDate.before(new Date())) throw new Exception("Wybrany czas już minął!");
-                else task.setDueDate(dueDate);
-            }
-        }
-        catch(Exception e)
-        {
-            throw e;
-        }
     }
 
     public void sortTasks(SortCriteria sortCriterium) throws Exception

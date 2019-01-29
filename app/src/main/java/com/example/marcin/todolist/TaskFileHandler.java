@@ -122,20 +122,6 @@ public class TaskFileHandler
         return null;
     }
 
-    public static void deleteFile(Context context)
-    {
-        try
-        {
-            File path = context.getFilesDir();
-            File file = new File(path, "tasks.txt");
-            file.delete();
-        }
-        catch(Exception e)
-        {
-            Toast.makeText(context, "deleteFile: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }
-
     public static void editTask(Context context, int index, String taskName, String taskDesc, int priority, Date dueDate)
     {
         FileOutputStream stream = null;
@@ -211,18 +197,6 @@ public class TaskFileHandler
         finally
         {
             if (stream != null) stream.close();
-        }
-    }
-
-    public static void reWriteToFile(Context context, TaskList tasks)
-    {
-        try
-        {
-
-        }
-        catch(Exception e)
-        {
-            Toast.makeText(context, "Błąd: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 

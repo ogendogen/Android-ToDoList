@@ -43,14 +43,6 @@ public class Task implements Cloneable
         }
     }
 
-    public static void validateData(String taskName, String taskDesc, int priority, Date dueDate, Boolean fromFile) throws Exception
-    {
-        if (priority < 0 || priority > 5) throw new Exception("Niepoprawny priorytet!");
-        if (taskName.length() > 20) throw new Exception("Za długa nazwa! (max. 20 znaków)");
-        if (taskDesc.length() > 128) throw new Exception("Za długi opis! (max. 128 znaków)");
-        if (dueDate.before(new Date()) && !fromFile) throw new Exception("Wybrany czas już minął!");
-    }
-
     public int getHashCode()
     {
         return (name.hashCode() * description.hashCode() * dueDate.hashCode()) / (priority == 0 ? 6 : priority);
